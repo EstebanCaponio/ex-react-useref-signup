@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useMemo, useRef, useState } from "react"
 
 const letters = "abcdefghijklmnopqrstuvwxyz";
 const numbers = "0123456789";
@@ -7,13 +7,15 @@ const symbols = "!@#$%^&*()-_=+[]{}|;:'\",.<>?/`~";
 
 function App() {
 
-  const [completeName, setCompleteName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [spec, setSpec] = useState('');
-  const [experience, setExperience] = useState('');
   const [description, setDescription] = useState('');
 
+
+
+  const completeNameRef = useRef();
+  const specRef = useRef();
+  const experienceRef = useRef();
 
   const isUsername = useMemo(() => {
     const charsValid = username.split('').every(c => {
@@ -42,6 +44,11 @@ function App() {
 
   const submit = (e) => {
     e.preventDefault();
+
+    const completeName = completeNameRef.current.value;
+    const spec = specRef.current.value;
+    const experience = experienceRef.current.value;
+
     if (!completeName.trim() ||
       !username.trim() ||
       !password.trim() ||
@@ -79,9 +86,8 @@ function App() {
               <input
                 type="text"
                 className="form-input"
-                value={completeName}
                 placeholder="Inserisci il nome completo"
-                onChange={e => setCompleteName(e.target.value)}
+                ref={completeNameRef}
               />
             </div>
             <div className="form-group">
@@ -125,8 +131,7 @@ function App() {
               <select
                 className="form-select"
                 name="specializzazione"
-                value={spec}
-                onChange={e => { setSpec(e.target.value) }}
+                ref={specRef}
               >
                 <option value="" disabled>Seleziona una specializzazione</option>
                 <option value="fullstack">Full Stack</option>
@@ -141,8 +146,7 @@ function App() {
               <input
                 type="number"
                 className="form-input"
-                value={experience}
-                onChange={e => { setExperience(e.target.value) }}
+                ref={experienceRef}
                 placeholder="Anni d'esperienza"
               />
             </div>

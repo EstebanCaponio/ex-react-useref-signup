@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 
 const letters = "abcdefghijklmnopqrstuvwxyz";
 const numbers = "0123456789";
@@ -71,6 +71,21 @@ function App() {
       experience,
       description
     })
+  }
+
+  useEffect(() => {
+    completeNameRef.current.focus();
+  }, [])
+
+  const resetForm = e => {
+    e.preventDefault();
+    setUsername('');
+    setPassword('');
+    setDescription('');
+    completeNameRef.current.value = '';
+    specRef.current.value = '';
+    experienceRef.current.value = '';
+    completeNameRef.current.focus();
   }
 
   return (
@@ -169,6 +184,7 @@ function App() {
               )}
             </div>
             <button type="submit" className="submit-btn">Invia</button>
+            <button onClick={resetForm} className="reset-btn">Reset</button>
           </form>
         </div>
       </div>

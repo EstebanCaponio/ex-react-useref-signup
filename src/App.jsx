@@ -1,4 +1,9 @@
-import { useState } from "react"
+import { useMemo, useState } from "react"
+
+const letters = "abcdefghijklmnopqrstuvwxyz";
+const numbers = "0123456789";
+const symbols = "!@#$%^&*()-_=+[]{}|;:'\",.<>?/`~";
+
 
 function App() {
 
@@ -8,6 +13,32 @@ function App() {
   const [spec, setSpec] = useState('');
   const [experience, setExperience] = useState('');
   const [description, setDescription] = useState('');
+
+
+  const isUsername = useMemo(() => {
+    const charsValid = username.split('').every(c => {
+      // La riga magica: restituisce il risultato della condizione
+      return letters.includes(c.toLocaleLowerCase()) || numbers.includes(c)
+    })
+
+    return charsValid && username.trim().length >= 6;
+  }, [username]);
+
+  const isPassowrd = useMemo(() => {
+    return (
+      password.trim().length >= 6 &&
+      password.split('').some(c => letters.includes(c)) &&
+      password.split('').some(c => numbers.includes(c)) &&
+      password.split('').some(c => symbols.includes(c))
+    )
+  }, [password]);
+
+  const isDescrpition = useMemo(() => {
+    return (
+      description.trim().length >= 100 &&
+      description.trim().length < 1000)
+  }, [description])
+
 
   const submit = (e) => {
     e.preventDefault();
@@ -61,6 +92,11 @@ function App() {
                 placeholder="Inserisci l'username"
                 onChange={e => setUsername(e.target.value)}
               />
+              {username.trim() && (
+                <p style={{ color: isUsername ? 'green' : 'red' }}>
+                  {isUsername ? 'username valido' : 'deve avere almeno 6 caratteri ALFANUMERICI'}
+                </p>
+              )}
             </div>
             <div className="form-group">
               <label>
@@ -73,6 +109,11 @@ function App() {
                 placeholder="Inserisci la password"
                 onChange={e => setPassword(e.target.value)}
               />
+              {password.trim() && (
+                <p style={{ color: isPassowrd ? 'green' : 'red' }}>
+                  {isPassowrd ? 'password valida' : 'deve avere almeno 8 caratteri, 1 lettera, 1 numero e 1 simbolo'}
+                </p>
+              )}
             </div>
             <div className="form-group">
               <label>
@@ -114,6 +155,11 @@ function App() {
                 onChange={e => { setDescription(e.target.value) }}
                 placeholder="Inserisci la tua descrizione qui..."
               ></textarea>
+              {description.trim() && (
+                <p style={{ color: isDescrpition ? 'green' : 'red' }}>
+                  {isDescrpition ? 'descrizione valida' : 'deve avere tra i 100 e 1000 caratteri'}
+                </p>
+              )}
             </div>
             <button type="submit" className="submit-btn">Invia</button>
           </form>

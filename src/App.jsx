@@ -48,7 +48,10 @@ function App() {
       !spec.trim() ||
       !experience.trim() ||
       experience <= 0 ||
-      !description.trim()) {
+      !description.trim() ||
+      !isUsername ||
+      !isPassowrd ||
+      !isDescrpition) {
       alert('err: compila tutto correttamente');
       return;
     }
